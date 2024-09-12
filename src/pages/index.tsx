@@ -2,7 +2,7 @@ import { Container, Grid, Spinner, Text } from "@chakra-ui/react";
 import SkinCard from "@/components/organisms/SkinCard";
 import FilterBar from "@/components/molecules/FilterBar";
 import useItems from "@/hooks/UseItems";
-import { Filters } from "@/types";
+import { Filters, Item } from "@/types";
 import SortButtons from "@/components/molecules/SortSelector";
 import React, { useState, useEffect } from "react";
 
@@ -12,13 +12,13 @@ const Home = () => {
     floatMin: 0,
     floatMax: 1,
     priceMin: 0,
-    priceMax: 1000,
+    priceMax: 0,
     category: "",
     sort: "price",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortedItems, setSortedItems] = useState<any[]>([]);
+  const [sortedItems, setSortedItems] = useState<Item[]>([]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedSearch = e.target.value
