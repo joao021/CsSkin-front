@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 
 interface SkinCardProps {
@@ -16,9 +16,15 @@ const SkinCard: React.FC<SkinCardProps> = ({
   float,
   category,
 }) => {
+  const [imageSrc, setImageSrc] = useState(image);
+
+  const handleImageError = () => {
+    setImageSrc("/image_unavailable.png");
+  };
+
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-      <Image src={image} alt={name} />
+      <Image src={imageSrc} alt={name} onError={handleImageError} />
       <Text fontWeight="bold" mt={2}>
         {name}
       </Text>
