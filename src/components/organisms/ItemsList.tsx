@@ -26,8 +26,7 @@ const ItemList = () => {
     }));
   };
 
-  const handleSubmit = () => {
-  };
+  const handleSubmit = () => {};
 
   return (
     <VStack spacing="4" align="start" width="100%">
@@ -66,13 +65,18 @@ const ItemList = () => {
         onChange={handleChange}
       />
       <Select
+        sx={{
+          option: {
+            color: "black",
+            background: "white",
+          },
+        }}
         name="category"
         placeholder="Category"
         value={filters.category || ""}
         onChange={handleChange}
       >
-        <option value="rifle">Rifle</option>
-        <option value="sniper">Sniper</option>
+        <option value=""></option>
       </Select>
       <Select
         name="sort"

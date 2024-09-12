@@ -5,6 +5,7 @@ import useItems from "@/hooks/UseItems";
 import { Filters, Item } from "@/types";
 import SortButtons from "@/components/molecules/SortSelector";
 import React, { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 
 const Home = () => {
   const [filters, setFilters] = useState<Filters>({
@@ -18,38 +19,44 @@ const Home = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
   const [sortedItems, setSortedItems] = useState<Item[]>([]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitizedSearch = e.target.value
-      .toLowerCase()
-      .replace(/[^a-z0-9]/gi, "");
+    const sanitizedSearch = e.target.value.toLowerCase();
+
     setSearchTerm(sanitizedSearch);
   };
 
   useEffect(() => {
-    if (searchTerm.length >= 3 || searchTerm === "") {
-      setFilters((prev) => ({ ...prev, name: searchTerm }));
+    if (debouncedSearchTerm.length >= 3 || debouncedSearchTerm === "") {
+      setFilters((prev) => ({ ...prev, name: debouncedSearchTerm }));
     }
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters((prev) => ({ ...prev, category: e.target.value }));
   };
 
-  const handleFloatChange = (min: number, max: number) => {
+  const handleFloatChange = (
+    min: number | undefined,
+    max: number | undefined
+  ) => {
     setFilters((prev) => ({
       ...prev,
-      floatMin: min,
-      floatMax: max,
+      floatMin: min || 0,
+      floatMax: max || 1,
     }));
   };
 
-  const handlePriceChange = (min: number, max: number) => {
+  const handlePriceChange = (
+    min: number | undefined,
+    max: number | undefined
+  ) => {
     setFilters((prev) => ({
       ...prev,
-      priceMin: min,
-      priceMax: max,
+      priceMin: min || 0,
+      priceMax: max || 0,
     }));
   };
 
