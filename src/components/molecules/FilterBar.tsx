@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Box,
   Input,
@@ -9,13 +9,14 @@ import {
   RangeSliderFilledTrack,
   RangeSliderThumb,
   VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useCategories } from '@/hooks/UseCategories';
 
 interface FilterBarProps {
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCategoryChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onFloatChange: (min: number, max: number) => void;
-  onPriceChange: (min: number, max: number) => void;
+  onPriceChange: (min: number | undefined, max: number | undefined) => void;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -24,27 +25,33 @@ const FilterBar: React.FC<FilterBarProps> = ({
   onFloatChange,
   onPriceChange,
 }) => {
-  const [floatRange, setFloatRange] = useState<[number, number]>([0, 1]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const { categories, loading, error } = useCategories();
 
-  const handlePriceChange = (newRange: [number, number]) => {
+  const [floatRange, setFloatRange] = useState<[number, number]>([0, 1]);
+  const [priceRange, setPriceRange] = useState<
+    [number | undefined, number | undefined]
+  >([undefined, undefined]);
+
+  const handlePriceChange = (
+    newRange: [number | undefined, number | undefined],
+  ) => {
     onPriceChange(newRange[0], newRange[1]);
   };
 
   const handlePriceInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: 0 | 1
+    index: 0 | 1,
   ) => {
     const value = parseFloat(e.target.value);
-  
-    setPriceRange((prev) => {
-      const newRange = [...prev] as [number, number]; 
-      newRange[index] = isNaN(value) ? 0 : value;
-      handlePriceChange(newRange); 
+
+    setPriceRange(prev => {
+      const newRange = [...prev] as [number | undefined, number | undefined];
+      newRange[index] = isNaN(value) ? undefined : value;
+
+      handlePriceChange(newRange);
       return newRange;
     });
   };
-  
 
   const handleFloatChange = (values: [number, number]) => {
     setFloatRange(values);
@@ -68,11 +75,18 @@ const FilterBar: React.FC<FilterBarProps> = ({
         <Text mb="2" color="gray.100">
           Category:
         </Text>
-        <Select onChange={onCategoryChange} color="gray.100" bg="gray.700">
-          <option value="">All Categories</option>
-          <option value="rifle">rifle</option>
-          <option value="sniper">sniper</option>
-        </Select>
+        {loading && <Text color="gray.100">Loading categories...</Text>}
+        {error && <Text color="red.500">{error}</Text>}
+        {!loading && !error && (
+          <Select onChange={onCategoryChange} color="gray.100" bg="gray.700">
+            <option value="">All Categories</option>
+            {categories.map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </Select>
+        )}
       </Box>
 
       <Box>
@@ -80,7 +94,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
           Float Range:
         </Text>
         <RangeSlider
-          aria-label={["min", "max"]}
+          aria-label={['min', 'max']}
           defaultValue={[0, 1]}
           min={0}
           max={1}
@@ -105,23 +119,24 @@ const FilterBar: React.FC<FilterBarProps> = ({
         <Box display="flex" gap="2">
           <Input
             placeholder="Min price"
-            value={priceRange[0]}
-            onChange={(e) => handlePriceInputChange(e, 0)}
+            value={priceRange[0] !== undefined ? priceRange[0] : ''}
+            onChange={e => handlePriceInputChange(e, 0)}
             type="number"
             color="gray.100"
             bg="gray.700"
           />
           <Input
             placeholder="Max price"
-            value={priceRange[1]}
-            onChange={(e) => handlePriceInputChange(e, 1)}
+            value={priceRange[1] !== undefined ? priceRange[1] : ''}
+            onChange={e => handlePriceInputChange(e, 1)}
             type="number"
             color="gray.100"
             bg="gray.700"
           />
         </Box>
         <Text color="gray.100">
-          Min: ${priceRange[0]} - Max: ${priceRange[1]}
+          Min: ${priceRange[0] !== undefined ? priceRange[0] : 0} - Max: $
+          {priceRange[1] !== undefined ? priceRange[1] : 0}
         </Text>
       </Box>
     </VStack>
