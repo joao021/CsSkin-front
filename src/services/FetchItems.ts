@@ -32,5 +32,3 @@ export const fetchItems = async (filters: {
     throw error;
   }
 };
-
-
