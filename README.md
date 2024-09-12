@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# CS Skins Store Frontend
 
-First, run the development server:
+Frontend desenvolvido com **Next.js** para listar e filtrar skins de CS:GO, integrando com a API que lista skins e permite a aplicação de filtros baseados em nome, float, preço e categoria. O projeto também utiliza **Chakra UI** para o design e componentes e segue boas práticas de desenvolvimento com **Jest** para testes unitários.
+
+## Sumário
+
+- [Descrição do Projeto](#descrição-do-projeto)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Requisitos](#requisitos)
+- [Instalação](#instalação)
+- [Rodando o Projeto](#rodando-o-projeto)
+- [Estrutura de Pastas](#estrutura-de-pastas)
+- [Boas Práticas Implementadas](#boas-práticas-implementadas)
+- [Testes](#testes)
+
+## Descrição do Projeto
+
+Este projeto é o frontend da aplicação **CS Skins Store**, que consome a API do **NestJS** para exibir e filtrar skins do jogo **CS:GO**. Ele oferece uma interface intuitiva e responsiva para os usuários interagirem com as skins, permitindo:
+- Filtragem por nome da skin
+- Filtragem por float (0.0 - 1.0)
+- Filtragem por preço
+- Filtragem por categoria (rifles, facas, etc.)
+
+O design da aplicação foi construído com **Chakra UI** para garantir uma interface de usuário moderna e acessível, além de seguir boas práticas de performance e acessibilidade do **Next.js**.
+
+## Tecnologias Utilizadas
+
+- **Next.js**: Framework React para construção de aplicativos web modernos.
+- **React**: Biblioteca para criação de interfaces de usuário.
+- **Chakra UI**: Biblioteca de componentes para React com foco em acessibilidade e responsividade.
+- **Axios**: Cliente HTTP usado para requisições à API.
+- **Jest**: Framework de testes para garantir a qualidade do código.
+- **TypeScript**: Linguagem de programação com tipagem estática.
+- **Framer Motion**: Biblioteca de animação para React.
+
+## Requisitos
+
+- **Node.js** (versão >= 18.x)
+- **npm** ou **yarn** (gerenciador de pacotes)
+
+## Instalação
+
+1. Clone o repositório:
+
+    ```bash
+    git clone https://github.com/usuario/csskin-front.git
+    cd csskin-front
+    ```
+
+2. Instale as dependências:
+
+    ```bash
+    npm install
+    ```
+
+3. Crie o arquivo `.env` na raiz do projeto com a URL da API:
+
+    ```bash
+    NEXT_PUBLIC_API_URL=http://localhost:3000
+    ```
+
+## Rodando o Projeto
+
+### Ambiente de Desenvolvimento
+
+Para rodar o projeto em ambiente de desenvolvimento, use o comando:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O frontend estará acessível em `http://localhost:3001` ou na porta padrão configurada no Next.js.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Ambiente de Produção
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Para compilar o projeto para produção, use:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+E para rodar a versão compilada:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estrutura de Pastas
 
-## Deploy on Vercel
+A estrutura de pastas foi organizada para garantir a modularidade e separação de responsabilidades:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  ├── components/           # Componentes reutilizáveis (molecules, organisms)
+  ├── hooks/                # Hooks customizados
+  ├── lib/                  # Configurações auxiliares (e.g., axios)
+  ├── pages/                # Páginas da aplicação Next.js
+  ├── services/             # Comunicação com a API (Axios)
+  ├── styles/               # Temas e configurações do Chakra UI
+  ├── theme/                # Arquivos de tema do Chakra UI
+  └── utils/                # Funções utilitárias (e.g., formatação de dados)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Boas Práticas Implementadas
+
+- **Responsabilidade Única**: Componentes são divididos em **molecules** e **organisms**, seguindo o Atomic Design.
+  
+- **Hooks Customizados**: Hooks como `useItems` e `useCategories` facilitam a reutilização de lógica de busca e filtros.
+  
+- **Componentização com Chakra UI**: O uso do **Chakra UI** para criar interfaces acessíveis e consistentes com pouca configuração adicional.
+  
+- **Axios**: A comunicação com a API é centralizada em um serviço Axios para facilitar a manutenção e o tratamento de erros.
+
+## Testes
+
+O projeto utiliza **Jest** e **Testing Library** para testes unitários. Para rodar os testes, execute:
+
+```bash
+npm run test
+```
+
+Os testes cobrem os principais componentes e hooks da aplicação, garantindo que as interações com a API e a UI estejam funcionando corretamente.
+
+---
